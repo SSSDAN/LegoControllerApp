@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_500">#FFC107</color>
+    <color name="purple_700">#FF4081</color>
+    <color name="white">#FFFFFF</color>
+    <color name="teal_200">#007bff</color>
+    <color name="teal_700">#00698f</color>
+    <color name="black">#000000</color>
+    <color name="limeGreen">#B6FF00</color> <!-- Фон -->
+    <color name="cyan">#A0FFF7</color>      <!-- Кнопки -->
+    <color name="darkGray">#555555</color>  <!-- Текст -->
+</resources>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/limeGreen">
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Выберите подходящий\nвам режим:"
+        android:textSize="20sp"
+        android:textColor="@color/darkGray"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonEasy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Простой режим\nEasy mode"
+        android:layout_below="@id/textTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/cyan"
+        android:textColor="@color/darkGray" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonAdvanced"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Продвинутый режим\nAdvanced mode"
+        android:layout_below="@id/buttonEasy"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="@color/cyan"
+        android:textColor="@color/darkGray" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Чем отличаются\nрежимы?"
+        android:layout_below="@id/buttonAdvanced"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/cyan"
+        android:textColor="@color/darkGray" />
+</RelativeLayout>

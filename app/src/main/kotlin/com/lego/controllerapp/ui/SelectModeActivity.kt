@@ -4,11 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.button.MaterialButton
-import com.lego.controllerapp.MainActivity
 import com.lego.controllerapp.R
 
 class SelectModeActivity : AppCompatActivity() {
@@ -16,22 +14,25 @@ class SelectModeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_mode)
 
-        val easyButton = findViewById<MaterialButton>(R.id.buttonEasy)
-        val advancedButton = findViewById<MaterialButton>(R.id.buttonAdvanced)
-        val helpButton = findViewById<MaterialButton>(R.id.buttonHelp)
+        val easyButton = findViewById<ImageButton>(R.id.buttonEasy)
+        val advancedButton = findViewById<ImageButton>(R.id.buttonAdvanced)
+        val helpButton = findViewById<ImageButton>(R.id.buttonHelp)
 
         easyButton.setOnClickListener {
             saveChoice(1)
-            startActivity(Intent(this, MainActivity::class.java))
+            markFirstLaunchComplete()
+            startActivity(Intent(this, ConfigListActivity::class.java))
         }
 
         advancedButton.setOnClickListener {
             saveChoice(2)
-            startActivity(Intent(this, EditorActivity::class.java))
+            markFirstLaunchComplete()
+            startActivity(Intent(this, ConfigListActivity::class.java))
         }
 
         helpButton.setOnClickListener {
-            Toast.makeText(this, "Простой — готовое, Продвинутый — с настройкой пульта", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Простой — готовые пульты\nПродвинутый — есть возможность самому создать пульт", Toast.LENGTH_LONG).show()
+
         }
     }
 
@@ -52,5 +53,10 @@ class SelectModeActivity : AppCompatActivity() {
     private fun saveChoice(choice: Int) {
         val sharedPreferences = getSharedPreferences("choice", MODE_PRIVATE)
         sharedPreferences.edit().putInt("choice", choice).apply()
+    }
+
+    private fun markFirstLaunchComplete() {
+        val appPrefs = getSharedPreferences("lego_controller_app", MODE_PRIVATE)
+        appPrefs.edit().putBoolean("is_first_launch", false).apply()
     }
 }

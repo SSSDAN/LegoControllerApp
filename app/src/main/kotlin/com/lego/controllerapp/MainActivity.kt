@@ -4,11 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.lego.controllerapp.ui.SelectModeActivity
+import com.lego.controllerapp.ui.ConfigListActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,12 +20,15 @@ class MainActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("lego_controller_app", MODE_PRIVATE)
 
-        // Проверка первого запуска приложения
         if (sharedPreferences.getBoolean("is_first_launch", true)) {
             startActivity(Intent(this, SelectModeActivity::class.java))
-            finish() // Закрываем MainActivity, чтобы пользователь не вернулся назад
+            finish()
             return
         }
+
+        // Сразу запускаем список конфигураций
+        startActivity(Intent(this, ConfigListActivity::class.java))
+        finish()
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)

@@ -5,7 +5,9 @@
             android:allowBackup="true"
             android:label="LegoControllerApp"
             android:supportsRtl="true"
-            android:theme="@style/Theme.LegoControllerApp">
+            android:theme="@style/Theme.LegoControllerApp"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher_round">
         <activity android:name=".MainActivity"
                   android:exported="true">
             <intent-filter>
@@ -16,6 +18,8 @@
         <activity android:name=".ui.EditorActivity" />
         <activity android:name=".ui.SelectModeActivity" />
         <activity android:name=".ui.SharedPreferencesHelper" />
+        <activity android:name=".ui.ConfigListActivity" />
+        <activity android:name=".ui.SettingsActivity" />
     </application>
 
 </manifest>

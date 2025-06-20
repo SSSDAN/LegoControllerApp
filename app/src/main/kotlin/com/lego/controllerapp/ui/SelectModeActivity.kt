@@ -19,20 +19,23 @@ class SelectModeActivity : AppCompatActivity() {
         val helpButton = findViewById<ImageButton>(R.id.buttonHelp)
 
         easyButton.setOnClickListener {
-            saveChoice(1)
+            saveChoice("simple")
             markFirstLaunchComplete()
             startActivity(Intent(this, ConfigListActivity::class.java))
         }
 
         advancedButton.setOnClickListener {
-            saveChoice(2)
+            saveChoice("advanced")
             markFirstLaunchComplete()
             startActivity(Intent(this, ConfigListActivity::class.java))
         }
 
         helpButton.setOnClickListener {
-            Toast.makeText(this, "Простой — готовые пульты\nПродвинутый — есть возможность самому создать пульт", Toast.LENGTH_LONG).show()
-
+            Toast.makeText(
+                this,
+                "Простой — готовые пульты\nПродвинутый — есть возможность самому создать пульт",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -43,16 +46,16 @@ class SelectModeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.layout.activity_select_mode) {
-            saveChoice(2)
+            saveChoice("advanced")
             startActivity(Intent(this, EditorActivity::class.java))
             return true
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun saveChoice(choice: Int) {
-        val sharedPreferences = getSharedPreferences("choice", MODE_PRIVATE)
-        sharedPreferences.edit().putInt("choice", choice).apply()
+    private fun saveChoice(mode: String) {
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        sharedPreferences.edit().putString("mode", mode).apply()
     }
 
     private fun markFirstLaunchComplete() {

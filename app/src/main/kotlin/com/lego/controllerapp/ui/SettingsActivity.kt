@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import androidx.appcompat.widget.Toolbar
 import com.google.android.material.appbar.MaterialToolbar
 import com.lego.controllerapp.R
 
@@ -20,14 +19,18 @@ class SettingsActivity : AppCompatActivity() {
         val toolbar = findViewById<MaterialToolbar>(R.id.settingsToolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Настройки"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        sharedPrefs = getSharedPreferences("choice", MODE_PRIVATE)
+        sharedPrefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
 
         modeSwitch = findViewById(R.id.modeSwitch)
-        modeSwitch.isChecked = sharedPrefs.getInt("choice", 1) == 2
+
+        val currentMode = sharedPrefs.getString("mode", "simple")
+        modeSwitch.isChecked = currentMode == "advanced"
 
         modeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            sharedPrefs.edit().putInt("choice", if (isChecked) 2 else 1).apply()
+            val newMode = if (isChecked) "advanced" else "simple"
+            sharedPrefs.edit().putString("mode", newMode).apply()
         }
     }
 

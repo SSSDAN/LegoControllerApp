@@ -33,7 +33,7 @@ class SelectModeActivity : AppCompatActivity() {
         helpButton.setOnClickListener {
             Toast.makeText(
                 this,
-                "Простой — готовые пульты\nПродвинутый — есть возможность самому создать пульт",
+                "Простой — готовые пульты\nПродвинутый — сам создаёшь пульт",
                 Toast.LENGTH_LONG
             ).show()
         }

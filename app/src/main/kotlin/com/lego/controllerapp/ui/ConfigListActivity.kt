@@ -1,8 +1,10 @@
 package com.lego.controllerapp.ui
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.lego.controllerapp.R
 import com.lego.controllerapp.data.Config
+import com.lego.controllerapp.data.ConfigType
 import com.lego.controllerapp.databinding.ActivityConfigListBinding
 import com.lego.controllerapp.viewmodel.ConfigViewModel
 import kotlinx.coroutines.launch
@@ -45,15 +48,26 @@ class ConfigListActivity : AppCompatActivity() {
         adapter = ConfigAdapter(
             isAdvanced = isAdvancedMode,
             onEdit = { /* TODO */ },
-            onDelete = { configViewModel.delete(it) }
+            onDelete = { config ->
+                lifecycleScope.launch {
+                    configViewModel.delete(config)
+                }
+            }
         )
+
 
         binding.configRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.configRecyclerView.adapter = adapter
 
         lifecycleScope.launch {
             configViewModel.configs.collect { configs ->
-                adapter.submitList(configs)
+                val isAdvanced = SharedPreferencesHelper(this@ConfigListActivity).isAdvancedMode()
+                val filtered = if (isAdvanced) {
+                    configs
+                } else {
+                    configs.filter { it.type == ConfigType.SOURCE }
+                }
+                adapter.submitList(filtered)
             }
         }
     }
@@ -125,11 +139,11 @@ class ConfigListActivity : AppCompatActivity() {
                     val file: File?
 
                     if (enteredName.isEmpty() || enteredName in existingNames) {
-                        val result = generateUniqueConfigName(existingNames)
+                        val result = generateUniqueConfigName(this@ConfigListActivity, existingNames)
                         name = result?.first ?: return@launch
                         file = result.second
                     } else {
-                        file = createEmptyJsonFile(enteredName)
+                        file = createEmptyJsonFile(this@ConfigListActivity, enteredName)
                         if (file == null) return@launch
                         name = enteredName
                     }
@@ -137,7 +151,7 @@ class ConfigListActivity : AppCompatActivity() {
                     val config = Config(
                         name = name,
                         filePath = file.absolutePath,
-                        type = "custom"
+                        type = ConfigType.CUSTOM
                     )
                     configViewModel.insert(config)
                 }
@@ -146,24 +160,26 @@ class ConfigListActivity : AppCompatActivity() {
             .show()
     }
 
-    private suspend fun generateUniqueConfigName(existingNames: List<String>): Pair<String, File>? {
+    private suspend fun generateUniqueConfigName(
+        context: Context,
+        existingNames: List<String>
+    ): Pair<String, File>? {
         var index = 1
         while (true) {
             val name = "config$index"
             if (name !in existingNames) {
-                val file = createEmptyJsonFile(name)
-                return file?.let { name to it }
+                val file = createEmptyJsonFile(context, name)
+                return name to file
             }
             index++
         }
     }
 
-    private fun createEmptyJsonFile(fileName: String): File? {
-        val dir = getExternalFilesDir(null) ?: return null
-        val file = File(dir, "$fileName.json")
-        if (!file.exists()) {
-            file.writeText("{}")
-        }
+
+    fun createEmptyJsonFile(context: Context, name: String): File {
+        val file = File(context.filesDir, "$name.json")
+        file.writeText("{}")
+        Log.d("FileCreate", "Создан файл: ${file.absolutePath}")
         return file
     }
 }

@@ -13,4 +13,9 @@ class SharedPreferencesHelper(private val context: Context) {
     fun setPreference(key: String, value: String) {
         preference.edit().putString(key, value).apply()
     }
+
+    fun isAdvancedMode(): Boolean {
+        return getPreference("mode") == "advanced"
+    }
+
 }

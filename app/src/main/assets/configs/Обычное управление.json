@@ -1,0 +1,24 @@
+{
+  "orientation": "landscape",
+  "controls": [
+    {
+      "type": "stick",
+      "id": "stick1",
+      "position": {
+        "x": 540,
+        "y": 960
+      },
+      "angle": 0,
+      "size": {
+        "length": 300,
+        "thickness": 60
+      },
+      "range": {
+        "min": -255,
+        "max": 255,
+        "neutral": 0
+      },
+      "spring_back": true
+    }
+  ]
+}

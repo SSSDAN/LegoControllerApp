@@ -26,24 +26,25 @@ class ConfigListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityConfigListBinding
     private val configViewModel: ConfigViewModel by viewModels()
     private lateinit var adapter: ConfigAdapter
-
+    private lateinit var prefsHelper: SharedPreferencesHelper
     private var isAdvancedMode: Boolean = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivityConfigListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Настройка тулбара вручную (как в SettingsActivity)
+        copyAssetsToInternalStorageForce()
+
+        prefsHelper = SharedPreferencesHelper(this)
+        val isAdvanced = prefsHelper.isAdvancedMode()
+
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Конфигурации"
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
-
-        // Теперь читаем SharedPreferences так же, как в SettingsActivity
-        val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        val currentMode = prefs.getString("mode", "simple")
-        isAdvancedMode = currentMode == "advanced"
 
         adapter = ConfigAdapter(
             isAdvanced = isAdvancedMode,
@@ -80,10 +81,9 @@ class ConfigListActivity : AppCompatActivity() {
         val currentMode = prefs.getString("mode", "simple")
         val newIsAdvanced = currentMode == "advanced"
 
-        // Если режим изменился — перерисовать меню и адаптер
         if (newIsAdvanced != isAdvancedMode) {
             isAdvancedMode = newIsAdvanced
-            invalidateOptionsMenu() // перерисует меню
+            invalidateOptionsMenu()
             adapter = ConfigAdapter(
                 isAdvanced = isAdvancedMode,
                 onEdit = { /* TODO */ },
@@ -174,6 +174,31 @@ class ConfigListActivity : AppCompatActivity() {
             index++
         }
     }
+
+
+    private fun copyAssetsToInternalStorageForce() {
+        val files = listOf(
+            "Обычное управление.json",
+            "Танковое управление.json"
+        )
+
+        files.forEach { fileName ->
+            val targetFile = File(filesDir, fileName)
+
+            try {
+                val input = assets.open(fileName)
+                val content = input.bufferedReader().use { it.readText() }
+
+                Log.d("AssetCopy", "Содержимое $fileName: $content")
+
+                targetFile.writeText(content)
+                Log.d("AssetCopy", "Перезаписали файл: $fileName")
+            } catch (e: Exception) {
+                Log.e("AssetCopy", "Ошибка при копировании $fileName: ${e.message}")
+            }
+        }
+    }
+
 
 
     fun createEmptyJsonFile(context: Context, name: String): File {

@@ -1,5 +1,6 @@
 package com.lego.controllerapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.lego.controllerapp.ui.SelectModeActivity
 import com.lego.controllerapp.ui.ConfigListActivity
+import com.lego.controllerapp.ui.SharedPreferencesHelper
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,17 +20,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sharedPreferences = getSharedPreferences("lego_controller_app", MODE_PRIVATE)
+        val prefsHelper = SharedPreferencesHelper(this)
 
-        if (sharedPreferences.getBoolean("is_first_launch", true)) {
+        if (prefsHelper.getPreference("is_first_launch") != "false") {
             startActivity(Intent(this, SelectModeActivity::class.java))
+            prefsHelper.setPreference("is_first_launch", "false")
             finish()
             return
         }
 
-        // Сразу запускаем список конфигураций
         startActivity(Intent(this, ConfigListActivity::class.java))
         finish()
+
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.app_name)
     }
 
+    @SuppressLint("ResourceType")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.layout.activity_main, menu)
         return true

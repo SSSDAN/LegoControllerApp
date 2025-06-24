@@ -17,9 +17,9 @@
         </activity>
         <activity android:name=".ui.EditorActivity" />
         <activity android:name=".ui.SelectModeActivity" />
-        <activity android:name=".ui.SharedPreferencesHelper" />
         <activity android:name=".ui.ConfigListActivity" />
         <activity android:name=".ui.SettingsActivity" />
+        <activity android:name=".ui.ControllerActivity" />
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.lego.controllerapp.ui
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -39,6 +40,11 @@ class ConfigAdapter(
         holder.delete.visibility = View.GONE
         holder.edit.setOnClickListener(null)
         holder.delete.setOnClickListener(null)
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView.context, ControllerActivity::class.java)
+            intent.putExtra("config_path", config.filePath)
+            holder.itemView.context.startActivity(intent)
+        }
 
         when (config.type) {
             ConfigType.CUSTOM -> {
